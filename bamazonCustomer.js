@@ -28,6 +28,43 @@ const createTable = function () {
                 "Price: $" + res[i].price + " || " +
                 "Stock: " + res[i].stock_quantity + "\n");
         }
-      
+        customerPromt(res);
     });
+}
+
+const customerPromt = function (res) {
+    inquirer.prompt([{
+        name: 'choice',
+        type: 'input',
+        message: "What would you like to buy?"
+    }]).then(function (answer) {
+        const correct = false;
+        for (let i = 0; i < res.length; i++) {
+            if (res[i].product_name == answer.choice) {
+                correct = true;
+                const product = answer.choice;
+                const id = i;
+                inquirer.prompt({
+                    name: "quant",
+                    type: "input",
+                    messgae: "How many items would you like to buy?",
+                    validate: function(value){
+                        if(isNaN(value) == false){
+                            return true;
+                        } else { return false;}
+                    }
+                }).then (function(answer){
+                    if ((res[id].stock_quantity-answer.quant)>0){
+                        connection.query("UPDATE products SET stock_quantity='" + (res[id].stock_quantity-answer.quant)+"' WHERE product_name='" + product_name + "'", function(err, res2){
+                            console.log("This Product has been bought, we hope you enjoy it!");
+                            createTable();
+                        })
+                    }else {
+                        console.log("That's not a valid option!");
+                        customerPromt(res);
+                    }
+                })
+            }
+        }
+    })
 }
