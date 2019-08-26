@@ -1,0 +1,24 @@
+{
+  "name": "nexus-amazon",
+  "version": "1.0.0",
+  "description": "This application is an amazon-like storefront that uses MySQL. The app will take in orders from customers and deplete stock from the store's inventory.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Angel2367716/Nexus-Amazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Angel2367716/Nexus-Amazon/issues"
+  },
+  "homepage": "https://github.com/Angel2367716/Nexus-Amazon#readme",
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "inquirer": "^7.0.0",
+    "mysql": "^2.17.1"
+  }
+}
