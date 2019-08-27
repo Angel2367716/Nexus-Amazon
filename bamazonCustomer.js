@@ -46,7 +46,15 @@ const customerPromt = function (res) {
 
         connection.query("SELECT * FROM products", function (err, res) {
             if (err) throw err;
-            
-          });
-      });
-    };
+            var selectedProduct;
+            for (let i = 0; i < res.length; i++) {
+                if (res[i].item_id === parseFloat(res.productID)) {
+                    selectedProduct = res[i];
+                    console.log(res[i].item_id);
+                    console.log(parseFloat(res.productID));
+                    console.log("Your product is " + JSON.stringify(selectedProduct));
+                }
+            }
+        });
+    });
+};
