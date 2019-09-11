@@ -2,7 +2,6 @@
 This application is an amazon-like storefront that uses MySQL. The app will take in orders from customers and deplete stock from the store's inventory.
 
 ## Technologies Used:
-* Node.JS
 * [cli-table](https://www.npmjs.com/package/cli-table)
 * [dotenv](https://www.npmjs.com/package/dotenv)
 * [inquirer](https://www.npmjs.com/package/inquirer)
