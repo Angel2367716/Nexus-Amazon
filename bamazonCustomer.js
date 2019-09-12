@@ -33,6 +33,48 @@ const productsTable = function () {
     });
 }
 
+//========================================================================================================================================
+// const askCustomer = function () {
+//     connection.query("SELECT * FROM products", function (err, res) {
+//         console.log(res);
+
+//         inquirer.prompt([{
+//             name: "itemID",
+//             type: "rawlist",
+//             choices: function (value) {
+//                 let chosenItemArray = [];
+//                 for (let i = 0; i < res.length; i++) {
+//                     chosenItemArray.push(res[i].product_name);
+//                 }
+//                 return chosenItemArray;
+//             },
+//             message: "What is the ID of the product you would like to buy?",
+
+//         }]).then(function (answer) {
+//             for (let i = 0; i < res.length; i++) {
+//                 let chosenItemArray;
+//                 if ((chosenItemArray.stock_quantity - answer.quantity) > 0) {
+//                     connection.query("UPDATE products SET ? WHERE ?", [{
+//                         stock_quantity: answer.quantity
+//                     }, {
+//                         item_id: answer.itemID
+//                     }], function (err, res) {
+//                         console.log("Product Bought!");
+//                         productsTable();
+//                     })
+//                 } else {
+//                     console.log("Invalid Selection, please try again");
+//                     askCustomer();
+//                 }
+//             }
+//         })
+//     })
+// }
+
+
+
+//========================================================================================================================================
+
 
 const askCustomer = function () {
     inquirer.prompt([{
@@ -58,7 +100,7 @@ const askCustomer = function () {
             }
         }
     }]).then(function (answer) {
-        if((res[id].stock_quantity - answer.quantity)>0){
+        if((res[item_id].stock_quantity - answer.quantity)>0){
             connection.query("UPDATE products SET ? WHERE ?",[{
                 stock_quantity:answer.quantity
             },{
@@ -73,6 +115,10 @@ const askCustomer = function () {
         }
     })
 }
+
+
+
+//========================================================================================================================================
 
 
 // const askCustomer = function () {
@@ -110,6 +156,10 @@ const askCustomer = function () {
 //         }
 //     })
 // }
+
+
+
+//========================================================================================================================================
 
 
 // const askCustomer = function () {
