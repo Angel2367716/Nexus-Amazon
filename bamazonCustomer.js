@@ -12,11 +12,11 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
-    showProducts();
+    console.log("Connected as id " + connection.threadId);
+    productsTable();
 });
 
-const showProducts = function () {
+const productsTable = function () {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
@@ -26,35 +26,128 @@ const showProducts = function () {
                 "Product: " + res[i].product_name + " || " +
                 // "Department: " + res[i].department_name + " || " +
                 "Price: $" + res[i].price + " || " +
-                // "Stock: " + res[i].stock_quantity +
+                "quantity: " + res[i].stock_quantity +
                 "\n");
         }
-        customerPromt(res);
+        askCustomer(res);
     });
 }
 
-const customerPromt = function (res) {
-    inquirer.prompt([{
-        name: 'productID',
-        type: 'input',
-        message: "Type in the Id of the product you would like to buy"
-    }, {
-        name: 'quantity',
-        type: 'input',
-        message: 'How many products would you like to buy?'
-    }]).then(function (res) {
 
-        connection.query("SELECT * FROM products", function (err, res) {
-            if (err) throw err;
-            var selectedProduct;
-            for (let i = 0; i < res.length; i++) {
-                if (res[i].item_id === parseFloat(res.productID)) {
-                    selectedProduct = res[i];
-                    console.log(res[i].item_id);
-                    console.log(parseFloat(res.productID));
-                    console.log("Your product is " + JSON.stringify(selectedProduct));
-                }
+const askCustomer = function () {
+    inquirer.prompt([{
+        name: "itemID",
+        type: "input",
+        message: "What is the ID of the product you would like to buy?",
+        validate: function (value) {
+            if (isNaN(value) == false) {
+                return true;
+            } else {
+                return false;
             }
-        });
-    });
-};
+        }
+    }, {
+        name: "quantity",
+        type: "input",
+        message: "How many units would you like to buy?",
+        validate: function (value) {
+            if (isNaN(value) == false) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }]).then(function (answer) {
+        if((res[id].stock_quantity - answer.quantity)>0){
+            connection.query("UPDATE products SET ? WHERE ?",[{
+                stock_quantity:answer.quantity
+            },{
+                item_id: answer.itemID
+            }], function (err, res){
+                console.log("Product Bought!");
+                productsTable();
+            })
+        }else {
+            console.log("Invalid Selection, please try again");
+            askCustomer();
+        }
+    })
+}
+
+
+// const askCustomer = function () {
+//     inquirer.prompt([{
+//         name: "itemID",
+//         type: "input",
+//         message: "What is the ID of the product you would like to buy?",
+//         validate: function (value) {
+//             if (isNaN(value) == false) {
+//                 return true;
+//             } else {
+//                 return false;
+//             }
+//         }
+//     }, {
+//         name: "quantity",
+//         type: "input",
+//         message: "How many units would you like to buy?",
+//         validate: function (value) {
+//             if (isNaN(value) == false) {
+//                 return true;
+//             } else {
+//                 return false;
+//             }
+//         }
+//     }]).then(function (answer) {
+//         if((res[id].stock_quantity - answer.quantity)>0){
+//             connection.query("UPDATE products SET stock_quantity='"+(res[id].stock_quantity - answer.quantity)+"' WHERE product_name='"+itemID + "'", function (err, res2){
+//                 console.log("Product Bought!");
+//                 productsTable();
+//             })
+//         }else {
+//             console.log("Invalid Selection, please try again");
+//             askCustomer();
+//         }
+//     })
+// }
+
+
+// const askCustomer = function () {
+//     inquirer.prompt([{
+//         name: "itemID",
+//         type: "input",
+//         message: "What is the ID of the product you would like to buy?",
+//         validate: function (value) {
+//             if (isNaN(value) == false) {
+//                 return true;
+//             } else {
+//                 return false;
+//             }
+//         }
+//     }, {
+//         name: "quantity",
+//         type: "input",
+//         message: "How many uinits would you like to buy?",
+//         validate: function (value) {
+//             if (isNaN(value) == false) {
+//                 return true;
+//             } else {
+//                 return false;
+//             }
+//         }
+//     }]).then(function(answer){
+//         connection.query("SELECT * FROM products", function(err, res){
+//             if(err) throw err;
+//             let chosenItem;
+//             for (let i=0; i<res.length; i++){
+//                 if(res[i].item_id == parseFloat(answer.itemID)){
+//                     chosenItem = res[i];
+//                     console.log(res[i].item_id);
+//                     console.log(parseFloat(res.itemID));
+//                     console.log("Your product is " + JSON.stringify(chosenItem));
+//                     askCustomer();
+//                 }
+//             }
+//         })
+//     })
+// }
