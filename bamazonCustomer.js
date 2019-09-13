@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-
+//========================================================================================================================================
 const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -15,7 +15,7 @@ connection.connect(function (err) {
     console.log("Connected as id " + connection.threadId);
     productsTable();
 });
-
+//========================================================================================================================================
 const productsTable = function () {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
@@ -34,49 +34,10 @@ const productsTable = function () {
 }
 
 //========================================================================================================================================
-// const askCustomer = function () {
-//     connection.query("SELECT * FROM products", function (err, res) {
-//         console.log(res);
-
-//         inquirer.prompt([{
-//             name: "itemID",
-//             type: "rawlist",
-//             choices: function (value) {
-//                 let chosenItemArray = [];
-//                 for (let i = 0; i < res.length; i++) {
-//                     chosenItemArray.push(res[i].product_name);
-//                 }
-//                 return chosenItemArray;
-//             },
-//             message: "What is the ID of the product you would like to buy?",
-
-//         }]).then(function (answer) {
-//             for (let i = 0; i < res.length; i++) {
-//                 let chosenItemArray;
-//                 if ((chosenItemArray.stock_quantity - answer.quantity) > 0) {
-//                     connection.query("UPDATE products SET ? WHERE ?", [{
-//                         stock_quantity: answer.quantity
-//                     }, {
-//                         item_id: answer.itemID
-//                     }], function (err, res) {
-//                         console.log("Product Bought!");
-//                         productsTable();
-//                     })
-//                 } else {
-//                     console.log("Invalid Selection, please try again");
-//                     askCustomer();
-//                 }
-//             }
-//         })
-//     })
-// }
-
-
-
 //========================================================================================================================================
 
 
-const askCustomer = function () {
+const askCustomer = function (res) {
     inquirer.prompt([{
         name: "itemID",
         type: "input",
@@ -100,12 +61,11 @@ const askCustomer = function () {
             }
         }
     }]).then(function (answer) {
-        if((res[item_id].stock_quantity - answer.quantity)>0){
-            connection.query("UPDATE products SET ? WHERE ?",[{
-                stock_quantity:answer.quantity
-            },{
-                item_id: answer.itemID
-            }], function (err, res){
+        // console.log(res[answer.itemID]);
+        const result = res.filter(product => product.item_id == answer.itemID);
+        console.log(result[0].stock_quantity);
+        if((result[0].stock_quantity - answer.quantity)>0){
+            connection.query("UPDATE products SET stock_quantity='"+(result[0].stock_quantity - answer.quantity)+"' WHERE product_name='"+result[0].product_name + "'", function (err, res2){
                 console.log("Product Bought!");
                 productsTable();
             })
@@ -115,89 +75,3 @@ const askCustomer = function () {
         }
     })
 }
-
-
-
-//========================================================================================================================================
-
-
-// const askCustomer = function () {
-//     inquirer.prompt([{
-//         name: "itemID",
-//         type: "input",
-//         message: "What is the ID of the product you would like to buy?",
-//         validate: function (value) {
-//             if (isNaN(value) == false) {
-//                 return true;
-//             } else {
-//                 return false;
-//             }
-//         }
-//     }, {
-//         name: "quantity",
-//         type: "input",
-//         message: "How many units would you like to buy?",
-//         validate: function (value) {
-//             if (isNaN(value) == false) {
-//                 return true;
-//             } else {
-//                 return false;
-//             }
-//         }
-//     }]).then(function (answer) {
-//         if((res[id].stock_quantity - answer.quantity)>0){
-//             connection.query("UPDATE products SET stock_quantity='"+(res[id].stock_quantity - answer.quantity)+"' WHERE product_name='"+itemID + "'", function (err, res2){
-//                 console.log("Product Bought!");
-//                 productsTable();
-//             })
-//         }else {
-//             console.log("Invalid Selection, please try again");
-//             askCustomer();
-//         }
-//     })
-// }
-
-
-
-//========================================================================================================================================
-
-
-// const askCustomer = function () {
-//     inquirer.prompt([{
-//         name: "itemID",
-//         type: "input",
-//         message: "What is the ID of the product you would like to buy?",
-//         validate: function (value) {
-//             if (isNaN(value) == false) {
-//                 return true;
-//             } else {
-//                 return false;
-//             }
-//         }
-//     }, {
-//         name: "quantity",
-//         type: "input",
-//         message: "How many uinits would you like to buy?",
-//         validate: function (value) {
-//             if (isNaN(value) == false) {
-//                 return true;
-//             } else {
-//                 return false;
-//             }
-//         }
-//     }]).then(function(answer){
-//         connection.query("SELECT * FROM products", function(err, res){
-//             if(err) throw err;
-//             let chosenItem;
-//             for (let i=0; i<res.length; i++){
-//                 if(res[i].item_id == parseFloat(answer.itemID)){
-//                     chosenItem = res[i];
-//                     console.log(res[i].item_id);
-//                     console.log(parseFloat(res.itemID));
-//                     console.log("Your product is " + JSON.stringify(chosenItem));
-//                     askCustomer();
-//                 }
-//             }
-//         })
-//     })
-// }
