@@ -24,7 +24,7 @@ const productsTable = function () {
             console.log(
                 "Item id: " + res[i].item_id + " || " +
                 "Product: " + res[i].product_name + " || " +
-                // "Department: " + res[i].department_name + " || " +
+                "Department: " + res[i].department_name + " || " +
                 "Price: $" + res[i].price + " || " +
                 "quantity: " + res[i].stock_quantity +
                 "\n");
