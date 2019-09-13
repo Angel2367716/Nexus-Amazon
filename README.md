@@ -16,7 +16,7 @@ This application is an amazon-like storefront that utilizes MySQL. The applicati
  3. Select the item you would like to purchase. On this example, we are using item id 4504 which corresponds to the Milaem Archery Recurve Bow sight. 
   ![](images/bamazon3.PNG)
 
- 4. Chossing the item id will prompt the user to specify how many items they would like to purchase. We will be choosing 10 items. 
+ 4. Choosing the item id will prompt the user to specify how many items they would like to purchase. We will be choosing 10 items. 
   ![](images/bamazon4.PNG)
 
  5. After selecting the amount of items to purchase, the application will restart from step 3, the database will update the amount of available items and the items on the store will display on the command line.
